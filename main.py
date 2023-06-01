@@ -1,9 +1,10 @@
 import time
 from tqdm import tqdm
+
 from javascript import require, On, off
 
 HOST = "192.168.0.15"
-PORT = 52921
+PORT = 53949
 BOT_USERNAME = "Robot"  # Same name == keep previous inventory
 
 mineflayer = require("mineflayer")
@@ -38,12 +39,15 @@ def handle_msg(this, sender, message, *args):
             _, number, block = message.split(" ")
             for _ in tqdm(range(int(number)), desc="Mining"):
                 try:
-                    block_pos = bot.findBlock({"point": bot.entity.position,
-                                               "matching": minecraft_data.blocksByName[block]["id"],
-                                               "maxDistance": 32,
-                                               "count": 1})["position"]
+                    # TODO: Fix failure to mine certain blocks
+                    block_pos = bot.findBlocks({"point": bot.entity.position,
+                                                "matching": minecraft_data.blocksByName[block]["id"],
+                                                "maxDistance": 32,
+                                                "count": 1})[0]
+                    print(block_pos.x, block_pos.y, block_pos.z)
                     bot.pathfinder.setGoal(pathfinder.goals.GoalNear(block_pos.x, block_pos.y, block_pos.z, 0))
-                    time.sleep(10)
+                    time.sleep(4)
+                    # TODO: Fix js bridge exception on 26th call?
                 except:
                     pass
             bot.chat(f"Finished mining {number} {block}")
