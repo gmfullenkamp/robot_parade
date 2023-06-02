@@ -36,6 +36,8 @@ class MinecraftBot:
                     off(self.bot, "chat", handle_msg)
                 elif "hunt" in message:
                     self.hunt(message)
+                elif "equip" in message:
+                    self.equip(message)
                 else:
                     self.bot.chat(f"Command '{message}' not available. I'm sorry master {self.master_username}")
 
@@ -80,4 +82,9 @@ class MinecraftBot:
     def hunt(self, message: str) -> None:
         # TODO: Implement a hunt command
         _, number, mob = message.split(" ")  # TODO: chat a message issue if not properly formatted
+        self.bot.chat(f"Command '{message}' not implemented. I'm sorry master {self.master_username}")
+
+    def equip(self, message: str) -> None:
+        # TODO: Implement equip command
+        _, item = message.split(" ")  # TODO: chat a message issue if not properly formatted
         self.bot.chat(f"Command '{message}' not implemented. I'm sorry master {self.master_username}")
