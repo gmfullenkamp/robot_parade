@@ -3,7 +3,7 @@ from multiprocessing import Process
 from MinecraftBot import MinecraftBot
 
 HOST = "192.168.0.15"
-PORT = 50319
+PORT = 51751
 BOT_USERNAME = "Robot"  # Same name == keep previous inventory
 
 

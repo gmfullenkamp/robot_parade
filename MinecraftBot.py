@@ -5,6 +5,8 @@ from javascript import require, On, off
 
 
 class MinecraftBot:
+    max_inventory_slots = 36
+
     def __init__(self, host: str, port: int, username: str = "Robot", master_username: str = "GermF"):
         """Initializes the bot and the different required packages."""
         self.username = username
@@ -29,9 +31,11 @@ class MinecraftBot:
                 if "come" in message:
                     self.come()
                 elif "mine" in message:
-                    self.mine(message)
-                elif "inventory" in message:
-                    self.inventory()
+                    self.mine(message, True)
+                elif "show_inventory" in message:
+                    self.show_inventory()
+                elif "fill_inventory" in message:
+                    self.fill_inventory(message)
                 elif "leave" in message:
                     off(self.bot, "chat", handle_msg)
                 elif "hunt" in message:
@@ -41,7 +45,7 @@ class MinecraftBot:
                 else:
                     self.bot.chat(f"Command '{message}' not available. I'm sorry master {self.master_username}")
 
-    def mine(self, message: str) -> None:
+    def mine(self, message: str, verbose: bool) -> None:
         _, number, block = message.split(" ")  # TODO: chat a message issue if not properly formatted
         # TODO: Use inventory as a way to detect when num blocks mined
         for _ in tqdm(range(int(number)), desc="Mining"):
@@ -57,6 +61,8 @@ class MinecraftBot:
                 # TODO: Fix js bridge exception on 26th call?
             except:
                 pass
+        if verbose:
+            self.bot.chat(f"Finished mining {number} {block} master {self.master_username}")
 
     def come(self) -> None:
         player = self.bot.players[self.master_username]
@@ -68,7 +74,7 @@ class MinecraftBot:
         self.bot.pathfinder.setMovements(self.movements)
         self.bot.pathfinder.setGoal(self.pathfinder.goals.GoalNear(pos.x, pos.y, pos.z, 1))
 
-    def inventory(self) -> dict:
+    def show_inventory(self) -> None:
         condensed_inventory = {}
         for item in self.bot.inventory.items():
             if item.name in condensed_inventory.keys():
@@ -77,7 +83,19 @@ class MinecraftBot:
                 condensed_inventory.update({item.name: item.count})
         for key in condensed_inventory.keys():
             self.bot.chat(f"{key}: {condensed_inventory[key]}")
-        return condensed_inventory
+
+    def fill_inventory(self, message) -> None:
+        _, block = message.split(" ")  # TODO: chat a message issue if not properly formatted
+        slots_filled = 0
+        for _ in self.bot.inventory.items():
+            slots_filled += 1
+        while slots_filled < self.max_inventory_slots:
+            self.come()
+            self.mine(f"mine {10} {block}", False)
+            slots_filled = 0
+            for _ in self.bot.inventory.items():
+                slots_filled += 1
+        self.bot.chat(f"Finished mining {block}, inventory full master {self.master_username}")
 
     def hunt(self, message: str) -> None:
         # TODO: Implement a hunt command
