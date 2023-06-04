@@ -1,11 +1,11 @@
 import time
-from tqdm import tqdm
 
 from javascript import require, On, off
 
 
 class MinecraftBot:
     max_inventory_slots = 36
+    block_pos_error = 0.9
 
     def __init__(self, host: str, port: int, username: str = "Robot", master_username: str = "GermF"):
         """Initializes the bot and the different required packages."""
@@ -29,9 +29,9 @@ class MinecraftBot:
             if sender and (sender != self.username) and (sender == self.master_username):
                 self.bot.chat(f"Command '{message}' received master {self.master_username}")
                 if "come" in message:
-                    self.come()
+                    self.come(verbose=True)
                 elif "mine" in message:
-                    self.mine(message, True)
+                    self.mine(message, verbose=True)
                 elif "show_inventory" in message:
                     self.show_inventory()
                 elif "fill_inventory" in message:
@@ -48,23 +48,30 @@ class MinecraftBot:
     def mine(self, message: str, verbose: bool) -> None:
         _, number, block = message.split(" ")  # TODO: chat a message issue if not properly formatted
         # TODO: Use inventory as a way to detect when num blocks mined
-        for _ in tqdm(range(int(number)), desc="Mining"):
+        for _ in range(int(number)):
             try:
-                # TODO: Fix failure to mine certain blocks
+                # TODO: Fix failure to mine certain blocks (unreachable blocks)
                 block_pos = self.bot.findBlocks({"point": self.bot.entity.position,
                                                  "matching": self.minecraft_data.blocksByName[block]["id"],
                                                  "maxDistance": 32,
                                                  "count": 1})[0]
-                # print(block_pos.x, block_pos.y, block_pos.z)
                 self.bot.pathfinder.setGoal(self.pathfinder.goals.GoalNear(block_pos.x, block_pos.y, block_pos.z, 0))
-                time.sleep(4)  # TODO: Instead of sleep, detect when bot made it to the goal
+                while True:
+                    if block_pos.x - self.block_pos_error <= self.bot.entity.position.x \
+                            <= block_pos.x + self.block_pos_error \
+                            and block_pos.y - self.block_pos_error <= self.bot.entity.position.y \
+                            <= block_pos.y + self.block_pos_error \
+                            and block_pos.z - self.block_pos_error <= self.bot.entity.position.z \
+                            <= block_pos.z + self.block_pos_error:
+                        time.sleep(1)
+                        break
                 # TODO: Fix js bridge exception on 26th call?
             except:
                 pass
         if verbose:
             self.bot.chat(f"Finished mining {number} {block} master {self.master_username}")
 
-    def come(self) -> None:
+    def come(self, verbose: bool) -> None:
         player = self.bot.players[self.master_username]
         target = player.entity
         if not target:
@@ -72,7 +79,19 @@ class MinecraftBot:
             return
         pos = target.position
         self.bot.pathfinder.setMovements(self.movements)
-        self.bot.pathfinder.setGoal(self.pathfinder.goals.GoalNear(pos.x, pos.y, pos.z, 1))
+        blocks_from_player = 1
+        self.bot.pathfinder.setGoal(self.pathfinder.goals.GoalNear(pos.x, pos.y, pos.z, blocks_from_player))
+        while True:
+            if pos.x - blocks_from_player - self.block_pos_error <= self.bot.entity.position.x \
+                    <= pos.x + blocks_from_player + self.block_pos_error \
+                    and pos.y - blocks_from_player - self.block_pos_error <= self.bot.entity.position.y \
+                    <= pos.y + blocks_from_player + self.block_pos_error \
+                    and pos.z - blocks_from_player - self.block_pos_error <= self.bot.entity.position.z \
+                    <= pos.z + blocks_from_player + self.block_pos_error:
+                time.sleep(1)
+                if verbose:
+                    self.bot.chat(f"I am here master {self.master_username}")
+                break
 
     def show_inventory(self) -> None:
         condensed_inventory = {}
@@ -90,8 +109,8 @@ class MinecraftBot:
         for _ in self.bot.inventory.items():
             slots_filled += 1
         while slots_filled < self.max_inventory_slots:
-            self.come()
-            self.mine(f"mine {10} {block}", False)
+            self.come(verbose=False)
+            self.mine(f"mine {10} {block}", verbose=False)
             slots_filled = 0
             for _ in self.bot.inventory.items():
                 slots_filled += 1
