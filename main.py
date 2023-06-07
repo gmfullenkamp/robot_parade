@@ -1,15 +1,20 @@
+import os
+import time
 from multiprocessing import Process
 
-from MinecraftBot import MinecraftBot
-
 HOST = "192.168.0.15"
-PORT = 51568
-COMMAND = "mine 100000 grass_block"
-BOT_USERNAME = "robot"  # Same name == keep previous inventory
+PORT = 64339
+NUM_BOTS = 7  # TODO: Figure out why it stops at 7?
+COMMAND = "mine-100000-grass_block"
 
 
 def main():
-    MinecraftBot(host=HOST, port=PORT, username=BOT_USERNAME, command=COMMAND)
+    for i in range(NUM_BOTS):
+        bot_username = f"robot_{i}"
+        proc = Process(target=os.system, args=[f"python create_bot.py --host {HOST} --port {PORT} "
+                                               f"--username {bot_username} --command {COMMAND}"])
+        proc.start()
+        time.sleep(1)
 
 
 if __name__ == "__main__":

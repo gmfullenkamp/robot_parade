@@ -38,17 +38,18 @@ class MinecraftBot:
             raise ValueError(f"command '{command}' doesn't contain an implemented command.")
 
     def mine(self, message: str) -> None:
-        _, number, block = message.split(" ")  # TODO: chat a message issue if not properly formatted
+        _, number, block = message.split("-")  # TODO: chat a message issue if not properly formatted
         # TODO: Use inventory as a way to detect when num blocks mined
         for _ in range(int(number)):
             try:
-                # TODO: Fix failure to mine certain blocks (unreachable blocks)
                 block_pos = self.bot.findBlocks({"point": self.bot.entity.position,
                                                  "matching": self.minecraft_data.blocksByName[block]["id"],
                                                  "maxDistance": 32,
                                                  "count": 1})[0]
-                self.bot.pathfinder.setGoal(self.pathfinder.goals.GoalNear(block_pos.x, block_pos.y, block_pos.z, 0))
                 while True:
+                    self.bot.pathfinder.setGoal(
+                        self.pathfinder.goals.GoalNear(block_pos.x, block_pos.y, block_pos.z, 0))
+                    time.sleep(1)
                     if block_pos.x - self.block_pos_error <= self.bot.entity.position.x \
                             <= block_pos.x + self.block_pos_error \
                             and block_pos.y - self.block_pos_error <= self.bot.entity.position.y \
@@ -57,7 +58,6 @@ class MinecraftBot:
                             <= block_pos.z + self.block_pos_error:
                         time.sleep(1)
                         break
-                # TODO: Fix js bridge exception on 26th call?
             except:
                 pass
 
@@ -69,8 +69,9 @@ class MinecraftBot:
         pos = target.position
         self.bot.pathfinder.setMovements(self.movements)
         blocks_from_player = 1
-        self.bot.pathfinder.setGoal(self.pathfinder.goals.GoalNear(pos.x, pos.y, pos.z, blocks_from_player))
         while True:
+            self.bot.pathfinder.setGoal(self.pathfinder.goals.GoalNear(pos.x, pos.y, pos.z, blocks_from_player))
+            time.sleep(1)
             if pos.x - blocks_from_player - self.block_pos_error <= self.bot.entity.position.x \
                     <= pos.x + blocks_from_player + self.block_pos_error \
                     and pos.y - blocks_from_player - self.block_pos_error <= self.bot.entity.position.y \
@@ -92,10 +93,10 @@ class MinecraftBot:
 
     def hunt(self, message: str) -> None:
         # TODO: Implement a hunt command
-        _, number, mob = message.split(" ")  # TODO: chat a message issue if not properly formatted
+        _, number, mob = message.split("-")  # TODO: chat a message issue if not properly formatted
         raise ValueError(f"Command '{message}' not implemented.")
 
     def equip(self, message: str) -> None:
         # TODO: Implement equip command
-        _, item = message.split(" ")  # TODO: chat a message issue if not properly formatted
+        _, item = message.split("-")  # TODO: chat a message issue if not properly formatted
         raise ValueError(f"Command '{message}' not implemented.")
