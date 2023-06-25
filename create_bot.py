@@ -9,7 +9,4 @@ parser.add_argument("--username", help="The username of the bot.", type=str)
 parser.add_argument("--command", help="The command for the bot to follow.", type=str)
 args = parser.parse_args()
 print(f"Creating bot '{args.username}'...")
-MinecraftBot(host=args.host,
-             port=args.port,
-             username=args.username,
-             command=args.command)
+MinecraftBot(host=args.host, port=args.port, username=args.username, command=args.command)

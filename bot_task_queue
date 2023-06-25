@@ -1,0 +1,57 @@
+from multiprocessing import Queue
+from javascript import require, once
+import time
+
+HOST = "192.168.0.15"
+PORT = 50355
+MASTER_USERNAME = "master"
+
+mineflayer = require("mineflayer")
+bot = mineflayer.createBot({"host": HOST,
+                            "port": PORT,
+                            "username": MASTER_USERNAME,
+                            "hideErrors": False})
+pathfinder = require("mineflayer-pathfinder")
+bot.loadPlugin(pathfinder.pathfinder)
+minecraft_data = require("minecraft-data")(bot.version)
+movements = pathfinder.Movements(bot, minecraft_data)
+
+# PRODUCER (produces tasks for the queue)
+once(bot, "login")
+time.sleep(1)
+home_loc = bot.players["GermF"].entity.position  # Or input position
+max_distance = 2  # Cubic radius around player location (No more than 50 -> ~ 1 million blocks)
+max_blocks = (max_distance * 2) ^ 3
+block_locs = bot.findBlocks({"point": home_loc, 
+                             "matching": minecraft_data.blocksByName["grass_block"]["id"],
+                             "maxDistance": max_distance,
+                             "count": max_blocks})
+print(block_locs)
+queue = Queue()
+# for task in block_locs:
+#     queue.put(task)
+# queue.put(None)
+
+# CONSUMER (consumes tasks from queue)
+# cbot = mineflayer.createBot({"host": HOST,
+#                              "port": PORT,
+#                              "username": "bot",
+#                              "hideErrors": False})
+# cbot.loadPlugin(pathfinder.pathfinder)
+# minecraft_data = require("minecraft-data")(cbot.version)
+# movements = pathfinder.Movements(cbot, minecraft_data)
+# while True:
+#     block_pos = queue.get()
+#     if block_pos is None:
+#         break
+    # while True:
+    #     cbot.pathfinder.setGoal(pathfinder.goals.GoalNear(block_pos.x, block_pos.y, block_pos.z, 0))
+    #     time.sleep(1)
+    #     if block_pos.x - 0.9 <= cbot.entity.position.x \
+    #             <= block_pos.x + 0.9 \
+    #             and block_pos.y - 0.9 <= cbot.entity.position.y \
+    #             <= block_pos.y + 0.9 \
+    #             and block_pos.z - 0.9 <= cbot.entity.position.z \
+    #             <= block_pos.z + 0.9:
+    #         time.sleep(1)
+    #         break
