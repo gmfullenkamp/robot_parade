@@ -1,0 +1,3 @@
+# TODO: Add badge for coverage to the README (Testing?)
+
+# TODO: Add documentation for installing the node.js packages
