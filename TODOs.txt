@@ -1,3 +1,20 @@
+# Questions:
 # TODO: Add badge for coverage to the README (Testing?)
 
+# Documentation: (priority 1)
 # TODO: Add documentation for installing the node.js packages
+# TODO: Create documentation for running the main.py file (argparse params)
+# TODO: Create a py file documentation header template to follow for all files
+
+# Main: (priority 2)
+# TODO: Create one script main.py for running a bot that listens to commands
+# TODO: Create the main for the main.py with argparsing
+# TODO: Get the minecraft bot to load into the user's specified world (based on argparse)
+
+# Train: (priority 3)
+# TODO: Create a second script train.py for running the langchain iterative prompting agents
+# TODO: Create the main for the main.py with argparsing
+# TODO: Get the MineDojo/Voyager agents up and running through huggingface LLMs instead of openai (free vs paid)
+
+# Modularization: (priority 4)
+# TODO: Modularize the train.py script for different use cases (try single prompt for code generation, testing, critiques, and documentation)
