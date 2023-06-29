@@ -82,3 +82,28 @@ class Voyager:
         self.messages = None
         self.conversations = []
         self.last_events = None
+
+    def reset(self, task, context="", reset_env=True):
+        """Resets the action agent, task, context, and environment."""
+        self.action_agent_rollout_num_iter = 0
+        self.task = task
+        self.context = context
+        if reset_env:
+            self.env.reset(mode="soft", wait_ticks=self.env_wait_ticks)
+        difficulty = ("easy" if len(self.curriculum_agent.completed_tasks) > 20 else "peaceful")
+        # Step to peek an observation
+        events = self.env.step("bot.chat(`/time set ${getNextTime()}`);\n" + f"bot.chat('/difficulty {difficulty}')")
+        skills = self.skill_manager.retrieve_skills(query=self.context)
+        print(f"\033[33mRender Action Agent system message with {len(skills)} skills\033[0m")
+        system_message = self.action_agent.render_system_message(skills=skills)
+        human_message = self.action_agent.render_human_message(events=events, code="", task=self.task, context=context,
+                                                               critique="")
+        self.messages = [system_message, human_message]
+        print(f"\033[32m****Action Agent human message****\n{human_message.content}\033[0m")
+        assert len(self.messages) == 2
+        self.conversations = []
+        return self.messages
+
+    def close(self):
+        """Closes the environment."""
+        self.env.close()
