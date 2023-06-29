@@ -9,9 +9,10 @@ To begin using the repository, you will need to
 
 1. Install Python v3.10.0
 2. Create a Python virtual environment
-3. Install the requirements.txt
+3. Install the Python requirements.txt
 4. Install Minecraft Java Edition v1.19.0
 5. Install Node v18.16.0
+6. Install the Node requirements
 ## Installation
 ### Install Python v3.10.0
 ___
@@ -29,7 +30,7 @@ After creating the environment, make sure to activate the environment.
 cd your_env_name/Scripts
 activate
 ```
-### Install the requirements.txt
+### Install the Python requirements.txt
 ___
 To install all the needed dependencies run this command with the path to the repository's requirements.txt.
 ```commandline
@@ -43,6 +44,30 @@ https://www.minecraft.net/en-us/download
 ___
 Follow the link and install Node v18.16.0 for your machine.
 https://nodejs.org/en/download
+### Install the Node requirements
+___
+To install all the needed dependencies run these commands.
+```commandline
+npm install mineflayer
+```
+## Command Line Arguments
+### main.py Options and Arguments
+___
+| Argument  | Type   | Description                                                       | Default  |
+|-----------|--------|-------------------------------------------------------------------|----------|
+| -h, --host| \<str> | The ip address to the host machine or server. (i.e. 123.45.67.89) | Required |
+| -p, --port| \<int> | The port on the host ip address. (i.e. 45678)                     | Required |
+| -n, --name| \<str> | The name of the Minecraft bot being created.                      | "Bot"    |
+### train.py Options and Arguments
+___
+| Argument  | Type   | Description                                                       | Default  |
+|-----------|--------|-------------------------------------------------------------------|----------|
+| -h, --host| \<str> | The ip address to the host machine or server. (i.e. 123.45.67.89) | Required |
+| -p, --port| \<int> | The port on the host ip address. (i.e. 45678)                     | Required |
+| -n, --name| \<str> | The name of the Minecraft bot being created.                      | "Bot"    |
 ## Contributing
 ___
 To make changes to the repository, please follow the instructions in `CONTRIBUTING.md`.
+## References
+___
+https://github.com/MineDojo/Voyager
