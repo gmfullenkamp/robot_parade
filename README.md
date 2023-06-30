@@ -1,73 +1,164 @@
-![linting](assets/pylint.svg) ![python](https://img.shields.io/badge/python-3.10-blue.svg) ![minecraft](https://img.shields.io/badge/minecraft-1.19.0-blue.svg) ![node](https://img.shields.io/badge/node-18.16.0-blue.svg)
-# Robot Parade
-___
-This repository is a jumping off point for creating Minecraft bots. The intended use is to have two scripts, one that allows the user to add a bot to there game that follows commands and does the actions. The second script will be a langchain iterative prompting algorithm that has the ability to make actions for Minecraft bots to use.
+# Voyager: An Open-Ended Embodied Agent with Large Language Models
+<div align="center">
 
-This project is still a work in progress, and will be constantly updated with new features.
+[[Website]](https://voyager.minedojo.org/)
+[[Arxiv]](https://arxiv.org/abs/2305.16291)
+[[PDF]](https://voyager.minedojo.org/assets/documents/voyager.pdf)
+[[Tweet]](https://twitter.com/DrJimFan/status/1662115266933972993?s=20)
 
-To begin using the repository, you will need to 
+[![Python Version](https://img.shields.io/badge/Python-3.9-blue.svg)](https://github.com/MineDojo/Voyager)
+[![GitHub license](https://img.shields.io/github/license/MineDojo/Voyager)](https://github.com/MineDojo/Voyager/blob/main/LICENSE)
+______________________________________________________________________
 
-1. Install Python v3.10.0
-2. Create a Python virtual environment
-3. Install the Python requirements.txt
-4. Install Minecraft Java Edition v1.19.0
-5. Install Node v18.16.0
-6. Install the Node requirements
-## Installation
-### Install Python v3.10.0
-___
-Follow the link and install Python 3.10.0 for your machine.
-https://www.python.org/downloads/release/python-3100/
-### Create a Python virtual environment
-___
-After you have installed Python v3.10.0, you'll need to create a Python virtual environment to run the code.
-A quick way to create an environment is to run this command in a command prompt.
-```commandline
-python -m venv your_env_name
+
+https://github.com/MineDojo/Voyager/assets/25460983/ce29f45b-43a5-4399-8fd8-5dd105fd64f2
+
+![](images/pull.png)
+
+
+</div>
+
+We introduce Voyager, the first LLM-powered embodied lifelong learning agent
+in Minecraft that continuously explores the world, acquires diverse skills, and
+makes novel discoveries without human intervention. Voyager consists of three
+key components: 1) an automatic curriculum that maximizes exploration, 2) an
+ever-growing skill library of executable code for storing and retrieving complex
+behaviors, and 3) a new iterative prompting mechanism that incorporates environment
+feedback, execution errors, and self-verification for program improvement.
+Voyager interacts with GPT-4 via blackbox queries, which bypasses the need for
+model parameter fine-tuning. The skills developed by Voyager are temporally
+extended, interpretable, and compositional, which compounds the agent’s abilities
+rapidly and alleviates catastrophic forgetting. Empirically, Voyager shows
+strong in-context lifelong learning capability and exhibits exceptional proficiency
+in playing Minecraft. It obtains 3.3× more unique items, travels 2.3× longer
+distances, and unlocks key tech tree milestones up to 15.3× faster than prior SOTA.
+Voyager is able to utilize the learned skill library in a new Minecraft world to
+solve novel tasks from scratch, while other techniques struggle to generalize.
+
+In this repo, we provide Voyager code. This codebase is under [MIT License](LICENSE).
+
+# Installation
+Voyager requires Python ≥ 3.9 and Node.js ≥ 16.13.0. We have tested on Ubuntu 20.04, Windows 11, and macOS. You need to follow the instructions below to install Voyager.
+
+## Python Install
 ```
-After creating the environment, make sure to activate the environment.
-```commandline
-cd your_env_name/Scripts
-activate
+git clone https://github.com/MineDojo/Voyager
+cd Voyager
+pip install -e .
 ```
-### Install the Python requirements.txt
-___
-To install all the needed dependencies run this command with the path to the repository's requirements.txt.
-```commandline
-pip install -r ./path_to_repository/requirements.txt
+
+## Node.js Install
+In addition to the Python dependencies, you need to install the following Node.js packages:
 ```
-### Install Minecraft Java Edition v1.19.0
-___
-Follow the link and install Minecraft v1.19.0 for your machine.
-https://www.minecraft.net/en-us/download
-### Install Node v18.16.0
-___
-Follow the link and install Node v18.16.0 for your machine.
-https://nodejs.org/en/download
-### Install the Node requirements
-___
-To install all the needed dependencies run these commands.
-```commandline
-npm install mineflayer
+cd voyager/env/mineflayer
+npm install -g npx
+npm install
+cd mineflayer-collectblock
+npx tsc
+cd ..
+npm install
 ```
-## Command Line Arguments
-### main.py Options and Arguments
-___
-| Argument  | Type   | Description                                                       | Default  |
-|-----------|--------|-------------------------------------------------------------------|----------|
-| -h, --host| \<str> | The ip address to the host machine or server. (i.e. 123.45.67.89) | Required |
-| -p, --port| \<int> | The port on the host ip address. (i.e. 45678)                     | Required |
-| -n, --name| \<str> | The name of the Minecraft bot being created.                      | "Bot"    |
-### train.py Options and Arguments
-___
-| Argument  | Type   | Description                                                       | Default  |
-|-----------|--------|-------------------------------------------------------------------|----------|
-| -h, --host| \<str> | The ip address to the host machine or server. (i.e. 123.45.67.89) | Required |
-| -p, --port| \<int> | The port on the host ip address. (i.e. 45678)                     | Required |
-| -n, --name| \<str> | The name of the Minecraft bot being created.                      | "Bot"    |
-## Contributing
-___
-To make changes to the repository, please follow the instructions in `CONTRIBUTING.md`.
-## References
-___
-https://github.com/MineDojo/Voyager
+
+## Minecraft Instance Install
+
+Voyager depends on Minecraft game. You need to install Minecraft game and set up a Minecraft instance.
+
+Follow the instructions in [Minecraft Login Tutorial](installation/minecraft_instance_install.md) to set up your Minecraft Instance.
+
+## Fabric Mods Install
+
+You need to install fabric mods to support all the features in Voyager. Remember to use the correct Fabric version of all the mods. 
+
+Follow the instructions in [Fabric Mods Install](installation/fabric_mods_install.md) to install the mods.
+
+# Getting Started
+Voyager uses OpenAI's GPT-4 as the language model. You need to have an OpenAI API key to use Voyager. You can get one from [here](https://platform.openai.com/account/api-keys).
+
+After the installation process, you can run Voyager by:
+```python
+from voyager import Voyager
+
+# You can also use mc_port instead of azure_login, but azure_login is highly recommended
+azure_login = {
+    "client_id": "YOUR_CLIENT_ID",
+    "redirect_url": "https://127.0.0.1/auth-response",
+    "secret_value": "[OPTIONAL] YOUR_SECRET_VALUE",
+    "version": "fabric-loader-0.14.18-1.19", # the version Voyager is tested on
+}
+openai_api_key = "YOUR_API_KEY"
+
+voyager = Voyager(
+    azure_login=azure_login,
+    openai_api_key=openai_api_key,
+)
+
+# start lifelong learning
+voyager.learn()
+```
+
+* If you are running with `Azure Login` for the first time, it will ask you to follow the command line instruction to generate a config file.
+* For `Azure Login`, you also need to select the world and open the world to LAN by yourself. After you run `voyager.learn()` the game will pop up soon, you need to:
+  1. Select `Singleplayer` and press `Create New World`.
+  2. Set Game Mode to `Creative` and Difficulty to `Peaceful`.
+  3. After the world is created, press `Esc` key and press `Open to LAN`.
+  4. Select `Allow cheats: ON` and press `Start LAN World`. You will see the bot join the world soon. 
+
+# Resume from a checkpoint during learning
+
+If you stop the learning process and want to resume from a checkpoint later, you can instantiate Voyager by:
+```python
+from voyager import Voyager
+
+voyager = Voyager(
+    azure_login=azure_login,
+    openai_api_key=openai_api_key,
+    ckpt_dir="YOUR_CKPT_DIR",
+    resume=True,
+)
+```
+
+# Run Voyager for a specific task with a learned skill library
+
+If you want to run Voyager for a specific task with a learned skill library, you should first pass the skill library directory to Voyager:
+```python
+from voyager import Voyager
+
+# First instantiate Voyager with skill_library_dir.
+voyager = Voyager(
+    azure_login=azure_login,
+    openai_api_key=openai_api_key,
+    skill_library_dir="./skill_library/trial1", # Load a learned skill library.
+    ckpt_dir="YOUR_CKPT_DIR", # Feel free to use a new dir. Do not use the same dir as skill library because new events will still be recorded to ckpt_dir. 
+    resume=False, # Do not resume from a skill library because this is not learning.
+)
+```
+Then, you can run task decomposition. Notice: Occasionally, the task decomposition may not be logical. If you notice the printed sub-goals are flawed, you can rerun the decomposition.
+```python
+# Run task decomposition
+task = "YOUR TASK" # e.g. "Craft a diamond pickaxe"
+sub_goals = voyager.decompose_task(task=task)
+```
+Finally, you can run the sub-goals with the learned skill library:
+```python
+voyager.inference(sub_goals=sub_goals)
+```
+
+For all valid skill libraries, see [Learned Skill Libraries](skill_library/README.md).
+
+# FAQ
+If you have any questions, please check our [FAQ](FAQ.md) first before opening an issue.
+
+# Paper and Citation
+
+If you find our work useful, please consider citing us! 
+
+```bibtex
+@article{wang2023voyager,
+  title   = {Voyager: An Open-Ended Embodied Agent with Large Language Models},
+  author  = {Guanzhi Wang and Yuqi Xie and Yunfan Jiang and Ajay Mandlekar and Chaowei Xiao and Yuke Zhu and Linxi Fan and Anima Anandkumar},
+  year    = {2023},
+  journal = {arXiv preprint arXiv: Arxiv-2305.16291}
+}
+```
+
+Disclaimer: This project is strictly for research purposes, and not an official product from NVIDIA.
