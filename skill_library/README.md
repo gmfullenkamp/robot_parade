@@ -2,9 +2,7 @@
 
 ## Ours
 
-* [skill_library/trial1](trial1)
-* [skill_library/trial2](trial2)
-* [skill_library/trial3](trial3)
+* [skill_library/all_trials](all_trials)
 
 ## Community Contributions
 

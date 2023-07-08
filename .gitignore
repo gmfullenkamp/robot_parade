@@ -115,6 +115,7 @@ mjkey.txt
 .idea
 
 # Locally generated files
+node_modules/
 dump.rdb
 *.local.ipynb
 runs/

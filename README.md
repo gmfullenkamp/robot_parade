@@ -65,12 +65,6 @@ Voyager depends on Minecraft game. You need to install Minecraft game and set up
 
 Follow the instructions in [Minecraft Login Tutorial](installation/minecraft_instance_install.md) to set up your Minecraft Instance.
 
-## Fabric Mods Install
-
-You need to install fabric mods to support all the features in Voyager. Remember to use the correct Fabric version of all the mods. 
-
-Follow the instructions in [Fabric Mods Install](installation/fabric_mods_install.md) to install the mods.
-
 # Getting Started
 Voyager uses OpenAI's GPT-4 as the language model. You need to have an OpenAI API key to use Voyager. You can get one from [here](https://platform.openai.com/account/api-keys).
 
